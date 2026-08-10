@@ -1,0 +1,52 @@
+{
+  "transfer": {
+    "wer_mean": 47.22194513715711,
+    "wer_std": 0.9110192880336686,
+    "n": 5,
+    "cer_mean": 17.155466547989914,
+    "cer_std": 0.3083691664655104,
+    "per_seed": {
+      "42": {
+        "wer": 46.33416458852867,
+        "cer": 17.14508233199822
+      },
+      "123": {
+        "wer": 47.79717373233583,
+        "cer": 17.248924491915147
+      },
+      "777": {
+        "wer": 48.462177888611805,
+        "cer": 17.608663403055928
+      },
+      "1234": {
+        "wer": 47.09891936824605,
+        "cer": 16.99302774069129
+      },
+      "2025": {
+        "wer": 46.41729010806318,
+        "cer": 16.781634772288978
+      }
+    }
+  },
+  "standard": {
+    "wer_mean": 47.02244389027431,
+    "wer_std": 0.6072829824973327,
+    "n": 5
+  },
+  "paired_transfer_vs_standard": {
+    "n_common_seeds": 5,
+    "common_seeds": [
+      42,
+      123,
+      777,
+      1234,
+      2025
+    ],
+    "mean_diff_wer": 0.19950124688279375,
+    "cohen_dz": 0.22409364090794603,
+    "wilcoxon_p": 0.8125,
+    "ttest_p": 0.6426285501100371,
+    "significant_at_0.05": false
+  },
+  "verdict": "No significant difference between Hindi->Garhwali transfer and Garhwali-only standard CTC. Consistent with prior work that the related standard language adds little beyond dialect data."
+}

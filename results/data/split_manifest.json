@@ -1,0 +1,12 @@
+{
+  "split_protocol": "official",
+  "text_field": "transcript",
+  "audio_field": "audio",
+  "sizes": {
+    "train": 4778,
+    "val": 666,
+    "test": 450
+  },
+  "vocab_size": 66,
+  "smoke": false
+}

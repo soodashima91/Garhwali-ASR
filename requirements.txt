@@ -1,0 +1,20 @@
+# Core numerical / stats stack.
+# Verifying the paper's statistics (scripts/reproduce_stats.py, test_logic.py)
+# needs only: numpy, scipy, torch, jiwer.
+numpy>=1.24
+scipy>=1.10
+jiwer>=3.0
+
+# Training / feature extraction (GPU path). Pin these when reproducing WER/CER
+# numbers: CTC and greedy-decoding behaviour can shift across releases.
+torch>=2.1
+transformers>=4.44        # needs Wav2Vec2BertForCTC / SeamlessM4TFeatureExtractor
+datasets>=2.19            # streams VAANI + FLEURS from the Hugging Face Hub
+librosa>=0.10             # speed perturbation (time-stretch) + resampling
+soundfile>=0.12           # audio decode (avoids torchcodec)
+
+# Text normalisation (must match the committed vocab/normaliser exactly).
+indic-nlp-library>=0.92
+
+# Post-hoc power analysis only (scripts/power_analysis.py).
+statsmodels>=0.14

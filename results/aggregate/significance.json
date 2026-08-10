@@ -1,0 +1,139 @@
+{
+  "multiseed": {
+    "per_seed_corpus_wer": {
+      "standard": [
+        46.317539484621776,
+        46.88279301745636,
+        47.24854530340814,
+        46.733167082294266,
+        47.930174563591024
+      ],
+      "focal": [
+        48.395677472984204,
+        48.06317539484622,
+        47.581047381546135,
+        46.766417290108066,
+        48.3624272651704
+      ],
+      "matra": [
+        47.48129675810474,
+        47.39817123857024,
+        47.049044056525354,
+        46.51704073150457,
+        48.6450540315877
+      ]
+    },
+    "primary_seed_level": [
+      {
+        "pair": "standard_vs_focal",
+        "n_seeds": 5,
+        "mean_diff": 0.8113050706566923,
+        "wilcoxon_p": 0.0625,
+        "ttest_p": 0.09263118013141065,
+        "wilcoxon_holm": 0.1875,
+        "wilcoxon_sig": false,
+        "ttest_holm": 0.277893540394232,
+        "ttest_sig": false
+      },
+      {
+        "pair": "standard_vs_matra",
+        "n_seeds": 5,
+        "mean_diff": 0.39567747298420813,
+        "wilcoxon_p": 0.3125,
+        "ttest_p": 0.21365007028286526,
+        "wilcoxon_holm": 0.375,
+        "wilcoxon_sig": false,
+        "ttest_holm": 0.277893540394232,
+        "ttest_sig": false
+      },
+      {
+        "pair": "focal_vs_matra",
+        "n_seeds": 5,
+        "mean_diff": -0.41562759767248425,
+        "wilcoxon_p": 0.1875,
+        "ttest_p": 0.11241273566258633,
+        "wilcoxon_holm": 0.375,
+        "wilcoxon_sig": false,
+        "ttest_holm": 0.277893540394232,
+        "ttest_sig": false
+      }
+    ],
+    "secondary_pooled_per_utt": [
+      {
+        "W": 497024.0,
+        "p": 0.002574622642819249,
+        "mean_diff": 0.9926079211372912,
+        "cohen_dz": 0.06946912699963517,
+        "boot_ci": [
+          0.40060951877983936,
+          1.598698589769331
+        ],
+        "pair": "standard_vs_focal",
+        "raw_p": 0.002574622642819249,
+        "holm_p": 0.007723867928457747,
+        "significant_0.05": true
+      },
+      {
+        "W": 572601.0,
+        "p": 0.17490078487641958,
+        "mean_diff": 0.4266353440124707,
+        "cohen_dz": 0.02905478462761999,
+        "boot_ci": [
+          -0.19359399206320124,
+          1.0544142016325604
+        ],
+        "pair": "standard_vs_matra",
+        "raw_p": 0.17490078487641958,
+        "holm_p": 0.17490078487641958,
+        "significant_0.05": false
+      },
+      {
+        "W": 542877.5,
+        "p": 0.06599891050234598,
+        "mean_diff": -0.5659725771248203,
+        "cohen_dz": -0.039520993002901704,
+        "boot_ci": [
+          -1.1616647841009529,
+          0.034177491979431894
+        ],
+        "pair": "focal_vs_matra",
+        "raw_p": 0.06599891050234598,
+        "holm_p": 0.13199782100469196,
+        "significant_0.05": false
+      }
+    ],
+    "secondary_note": "pooled test treats same-utterance/different-seed points as independent; overstates significance, use as directional cross-check only"
+  },
+  "matra_class_std_vs_matra_seed42": {
+    "class": "matra",
+    "n_paired": 442,
+    "mean_err_a": 0.2282295696091921,
+    "mean_err_b": 0.22341787930268833,
+    "mean_reduction_a_minus_b": 0.004811690306503767,
+    "W": 12586.0,
+    "p": 0.42447479888007167
+  },
+  "bootstrap_ci_seed42": {
+    "standard": {
+      "wer_mean": 48.856997041567766,
+      "ci95": [
+        46.69865860493072,
+        51.0398768725352
+      ]
+    },
+    "focal": {
+      "wer_mean": 49.21388865341354,
+      "ci95": [
+        47.104590813042996,
+        51.39100916357013
+      ]
+    },
+    "matra": {
+      "wer_mean": 49.02282006867496,
+      "ci95": [
+        46.98619902250951,
+        51.17768953981081
+      ]
+    }
+  }
+}

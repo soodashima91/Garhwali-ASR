@@ -1,0 +1,12 @@
+Copyright (c) 2026 The Authors.
+
+TODO: choose a license for this code before public release (e.g. MIT or
+Apache-2.0 for permissive reuse). Add its full text here.
+
+Note: this license covers ONLY the code and the transcript-free numerical
+results in this repository. It does NOT cover:
+  - the VAANI corpus (audio/transcripts), which remains under the terms set by
+    ARTPARK-IISc and is not redistributed here;
+  - FLEURS, which remains under its own license;
+  - indic_nlp_resources, which remains under its own license.
+See DATA.md for provenance.

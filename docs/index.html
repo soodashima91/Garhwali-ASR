@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seeds Before Objectives — Multi-seed Garhwali ASR</title>
+<meta name="description" content="Interactive companion to Batra, Singh, Sood, Singh & Sharma (ICNLSP 2026): the first reproducible multi-seed ASR benchmark for low-resource Garhwali, and why single-run gains don't replicate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="assets/chart.umd.min.js"></script>
+<script src="assets/data.js" defer></script>
+<script src="assets/app.js" defer></script>
+<style>
+:root{
+  --paper:#faf6ef;        /* warm off-white */
+  --ink:#22201c;          /* near-black warm ink */
+  --ink-soft:#6a6459;
+  --card:#ffffff;
+  --line:#e8e0d2;
+  --accent:#b5442e;       /* terracotta — "ours" / signal */
+  --accent-soft:#f3e0d9;
+  --slate:#3f5b6b;        /* muted blue — baselines / secondary */
+  --slate-soft:#e0e8ec;
+  --gold:#c69749;
+  --green:#4d7a5a;        /* the one thing that holds up */
+  --radius:14px;
+  --maxw:1060px;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif;line-height:1.1;margin:0;font-weight:600}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:40;background:rgba(250,246,239,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{font-family:'Newsreader';font-weight:700;font-size:1.05rem}
+.brand span{color:var(--accent)}
+.navlinks{display:flex;gap:20px;font-size:.86rem}
+.navlinks a{color:var(--ink-soft)}
+.navlinks a:hover{color:var(--ink);text-decoration:none}
+.ghbtn{border:1px solid var(--ink);border-radius:999px;padding:6px 14px;font-size:.8rem;color:var(--ink);font-weight:500}
+.ghbtn:hover{background:var(--ink);color:var(--paper);text-decoration:none}
+@media(max-width:840px){.navlinks{display:none}}
+
+/* hero */
+.hero{padding:70px 0 40px}
+.hero h1{font-size:clamp(2.2rem,5.6vw,3.9rem);letter-spacing:-.01em;max-width:22ch;font-weight:700}
+.hero .lede{font-size:1.12rem;color:var(--ink-soft);max-width:68ch;margin:22px 0 24px}
+.hero .lede b{color:var(--ink);font-weight:600}
+.authors{font-size:.92rem;color:var(--ink-soft)}
+.authors b{color:var(--ink);font-weight:600}
+.authors .you{color:var(--accent);font-weight:600}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.badge{font-family:var(--mono);font-size:.74rem;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:4px 10px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-weight:600;font-size:.92rem;border:1px solid transparent;cursor:pointer}
+.btn-primary{background:var(--ink);color:var(--paper)}
+.btn-primary:hover{background:#000;text-decoration:none}
+.btn-ghost{border-color:var(--ink);color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--paper);text-decoration:none}
+
+/* stat strip */
+.statstrip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
+@media(max-width:760px){.statstrip{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.stat .num{font-family:'Newsreader';font-weight:700;font-size:1.9rem;line-height:1;color:var(--ink)}
+.stat .num .u{font-size:1rem;color:var(--ink-soft)}
+.stat .lab{font-size:.8rem;color:var(--ink-soft);margin-top:8px}
+
+/* sections */
+section{padding:54px 0;border-top:1px solid var(--line)}
+.sec-head{max-width:64ch;margin-bottom:30px}
+.sec-head h2{font-size:clamp(1.6rem,4vw,2.3rem);margin:10px 0}
+.sec-head p{color:var(--ink-soft);font-size:1.02rem}
+
+/* thesis callout */
+.thesis{background:var(--ink);color:var(--paper);border-radius:18px;padding:34px}
+.thesis .eyebrow{color:var(--gold)}
+.thesis p{font-family:'Newsreader';font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1.4;margin:14px 0 0;max-width:56ch}
+
+/* findings */
+.findings{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:840px){.findings{grid-template-columns:1fr}}
+.finding{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;transition:transform .15s,box-shadow .15s}
+.finding:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(34,32,28,.07)}
+.finding .fn{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:.1em}
+.finding h3{font-size:1.2rem;margin:12px 0 8px}
+.finding p{font-size:.9rem;color:var(--ink-soft);margin:0}
+
+/* seed scatter signature */
+.seedbox{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px}
+.seedbox .chart-shell{min-height:330px}
+.seed-caption{font-size:.9rem;color:var(--ink-soft);margin-top:16px;padding-left:14px;border-left:2px solid var(--accent)}
+
+/* generic chart shell */
+.chart-shell{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px}
+.chart-shell canvas{max-height:330px}
+
+/* model comparison */
+.modeltable{width:100%;border-collapse:collapse;font-size:.92rem;background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+.modeltable th,.modeltable td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.modeltable th{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:500;background:var(--paper)}
+.modeltable tr:last-child td{border-bottom:none}
+.modeltable tr.ours{background:var(--accent-soft)}
+.modeltable tr.ours td{font-weight:600}
+.modeltable .wer{font-family:var(--mono)}
+.tag-ours{font-family:var(--mono);font-size:.66rem;background:var(--accent);color:#fff;padding:1px 7px;border-radius:4px;margin-left:8px}
+.tag-note{font-size:.74rem;color:var(--ink-soft);display:block;margin-top:2px}
+
+/* toggle */
+.toggles{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.tbtn{font-family:var(--mono);font-size:.8rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;transition:.15s}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn.active{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:500}
+
+/* significance / power cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:840px){.grid2{grid-template-columns:1fr}}
+.sigtable{width:100%;border-collapse:collapse;font-size:.9rem}
+.sigtable th,.sigtable td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.sigtable th{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+.ns{font-family:var(--mono);font-size:.7rem;background:var(--slate-soft);color:var(--slate);padding:2px 8px;border-radius:5px}
+.powercard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.powerbig{display:flex;align-items:baseline;gap:16px;margin:8px 0 14px}
+.powerbig .p{font-family:'Newsreader';font-weight:700;font-size:2.4rem;color:var(--accent)}
+.powerbig .arrow{font-size:1.4rem;color:var(--ink-soft)}
+.powerbig .p2{font-family:'Newsreader';font-weight:700;font-size:2.4rem;color:var(--green)}
+.powerbig .lab{font-size:.8rem;color:var(--ink-soft)}
+.powercard p{font-size:.9rem;color:var(--ink-soft);margin:0}
+
+/* aug + matra highlight cards */
+.hlcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.hlcard.green{border-left:4px solid var(--green)}
+.hlcard .ht{font-family:'Newsreader';font-weight:600;font-size:1.15rem;margin-bottom:8px}
+.hlcard p{font-size:.9rem;color:var(--ink-soft);margin:0}
+.hlcard .big{font-family:var(--mono);font-size:1.05rem;color:var(--ink);margin:10px 0}
+.hlcard .big b{color:var(--green)}
+
+/* setup */
+.setupgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:760px){.setupgrid{grid-template-columns:1fr}}
+.srow{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.srow .k{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.srow .v{font-size:.9rem;color:var(--ink);margin-top:4px}
+
+/* error profile */
+.errbars{display:flex;flex-direction:column;gap:10px}
+.errrow{display:grid;grid-template-columns:220px 1fr 48px;align-items:center;gap:12px;font-size:.88rem}
+@media(max-width:640px){.errrow{grid-template-columns:130px 1fr 42px}}
+.errrow .bar{height:14px;background:var(--slate);border-radius:4px}
+.errrow:first-child .bar{background:var(--accent)}
+.errrow .pct{font-family:var(--mono);font-size:.82rem;color:var(--ink-soft);text-align:right}
+
+/* limitations */
+.ticklist{list-style:none;padding:0;margin:0}
+.ticklist li{font-size:.94rem;color:var(--ink-soft);padding:11px 0 11px 28px;position:relative;border-bottom:1px solid var(--line)}
+.ticklist li:last-child{border-bottom:none}
+.ticklist li::before{content:"—";position:absolute;left:0;color:var(--accent);font-weight:700}
+
+/* code CTA */
+.codecta{background:var(--ink);color:var(--paper);border-radius:18px;padding:34px;text-align:center}
+.codecta h2{color:var(--paper);font-size:1.7rem}
+.codecta p{color:rgba(250,246,239,.75);max-width:56ch;margin:12px auto 22px}
+.codecta .btn-primary{background:var(--accent)}
+.codecta .btn-primary:hover{background:#c8502f}
+.codecta code{font-family:var(--mono);font-size:.86rem;background:rgba(250,246,239,.1);padding:3px 8px;border-radius:5px;color:var(--gold)}
+
+/* footer */
+footer{background:var(--card);border-top:1px solid var(--line);padding:50px 0 40px}
+footer h2{font-size:1.5rem}
+.cite{font-family:var(--mono);font-size:.82rem;color:var(--ink-soft);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:18px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap;margin-top:22px;font-size:.9rem}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <div class="brand">Seeds Before <span>Objectives</span></div>
+    <div class="navlinks">
+      <a href="#findings">Findings</a>
+      <a href="#seeds">Why seeds</a>
+      <a href="#models">Models</a>
+      <a href="#objectives">Objectives</a>
+      <a href="#probing">Probing</a>
+      <a href="#code">Code</a>
+    </div>
+    <a class="ghbtn" href="https://github.com/soodashima91/Garhwali-ASR" target="_blank" rel="noopener">View on GitHub</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow reveal">ICNLSP 2026 · Low-resource ASR · Reproducibility</div>
+    <h1 class="reveal">Seeds before objectives: what actually improves low-resource Garhwali ASR?</h1>
+    <p class="lede reveal">At the corpus sizes typical of under-resourced dialects, a single training run can show a "gain" that is really just <b>seed noise</b>. We build the first reproducible <b>multi-seed</b> ASR benchmark for Garhwali on the official VAANI splits — and watch several plausible improvements dissolve once you test them properly.</p>
+    <p class="authors reveal">Karamvir S. Batra, Prathamjyot Singh, <span class="you">Ashima Sood</span>, Jasmeet Singh, Sahil Sharma · Thapar Institute &amp; Ulster University</p>
+    <div class="badges reveal">
+      <span class="badge">w2v-BERT 2.0</span>
+      <span class="badge">VAANI Garhwali</span>
+      <span class="badge">5 seeds · significance testing</span>
+    </div>
+    <div class="hero-cta reveal">
+      <a class="btn btn-primary" href="#seeds">See why seeds matter ↓</a>
+      <a class="btn btn-ghost" href="https://github.com/soodashima91/Garhwali-ASR" target="_blank" rel="noopener">Get the code</a>
+    </div>
+
+    <div class="statstrip reveal">
+      <div class="stat"><div class="num">47.0<span class="u">%</span></div><div class="lab">Best WER (w2v-BERT 2.0, 5-seed mean)</div></div>
+      <div class="stat"><div class="num">580<span class="u">M</span></div><div class="lab">Params — beats models 2–3× larger</div></div>
+      <div class="stat"><div class="num">5</div><div class="lab">Seeds, official VAANI splits</div></div>
+      <div class="stat"><div class="num">~2.5<span class="u">M</span></div><div class="lab">Garhwali speakers, severely under-resourced</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- THESIS -->
+<section id="thesis">
+  <div class="wrap">
+    <div class="thesis reveal">
+      <div class="eyebrow">The central claim</div>
+      <p id="thesis-text"></p>
+    </div>
+  </div>
+</section>
+
+<!-- FINDINGS -->
+<section id="findings">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">What we found</div>
+      <h2>Three plausible gains that don't survive testing</h2>
+      <p>Each looked promising in a single run. Under five-seed evaluation with significance testing, each dissolves.</p>
+    </div>
+    <div class="findings reveal" id="findings-grid"></div>
+  </div>
+</section>
+
+<!-- SEED SCATTER -->
+<section id="seeds">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">The core argument</div>
+      <h2>One run can't tell these objectives apart</h2>
+      <p>Each dot is one seed's corpus WER. The three objectives' per-seed results interleave — the best Focal seed and the best Standard seed sit within noise of each other. Pick any single seed and you could "prove" any objective wins.</p>
+    </div>
+    <div class="seedbox reveal">
+      <div class="chart-shell"><canvas id="seedChart"></canvas></div>
+      <div class="seed-caption" id="seed-caption"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELS -->
+<section id="models">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Model comparison</div>
+      <h2>Pretraining design beats parameter count</h2>
+      <p>The 580M w2v-BERT 2.0 encoder gets the lowest WER on the official Garhwali test set — ahead of the larger MMS-1B and comparable-scale XLS-R and HuBERT. Whisper Large-v3 is a reference point only.</p>
+    </div>
+    <table class="modeltable reveal" id="model-table">
+      <thead><tr><th>Model</th><th>Params</th><th>WER (5-seed mean)</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- OBJECTIVES -->
+<section id="objectives">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Objective comparison</div>
+      <h2>No objective beats standard CTC</h2>
+      <p>Toggle between with and without speed augmentation. Standard CTC is level with or ahead of both alternatives, and none of the differences survive significance testing.</p>
+    </div>
+    <div class="toggles reveal" id="obj-toggle"></div>
+    <div class="chart-shell reveal" style="background:var(--card)"><canvas id="objChart"></canvas></div>
+
+    <div class="grid2 reveal" style="margin-top:24px">
+      <div>
+        <table class="sigtable">
+          <thead><tr><th>Pair</th><th>Δ WER</th><th>p (Holm)</th><th></th></tr></thead>
+          <tbody id="sig-body"></tbody>
+        </table>
+      </div>
+      <div class="powercard">
+        <div class="eyebrow">Power analysis</div>
+        <div class="powerbig"><span class="p" id="pw-have"></span><span class="arrow">→</span><span class="p2" id="pw-need"></span></div>
+        <div class="lab" style="margin-bottom:10px">seeds run → seeds needed for 80% power</div>
+        <p id="pw-note"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATRA + AUG -->
+<section id="highlights">
+  <div class="wrap">
+    <div class="grid2 reveal">
+      <div class="hlcard">
+        <div class="ht">The targeted objective misses its target</div>
+        <div class="big" id="matra-big"></div>
+        <p>The matra-weighted loss was designed specifically to reduce vowel-diacritic (matra) errors. It doesn't — the matra error rate is statistically unchanged (p=0.42). A single run might have shown a spurious drop.</p>
+      </div>
+      <div class="hlcard green">
+        <div class="ht">The one thing that holds up: speed augmentation</div>
+        <div class="big" id="aug-big"></div>
+        <p id="aug-note"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBING -->
+<section id="probing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Where fine-tuning acts · Appendix C</div>
+      <h2>Fine-tuning repurposes the upper layers</h2>
+      <p>A lightweight linear CTC probe reads each encoder layer. In the base model, decodable content peaks mid-network then degrades; fine-tuning reshapes exactly the top layers, where probe error falls all the way to near full-model performance. Lower WER is better.</p>
+    </div>
+    <div class="chart-shell reveal" style="background:var(--card)"><canvas id="probeChart"></canvas></div>
+    <p class="seed-caption reveal" id="probe-note" style="margin-top:16px"></p>
+  </div>
+</section>
+
+<!-- ERROR PROFILE -->
+<section id="errors">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">What the errors are</div>
+      <h2>Fine-grained drift, not gross mistakes</h2>
+      <p>A functional categorisation of the remaining errors, reconciled across four independent LLMs. The system's errors are dominated by subtle orthographic and phonetic drift.</p>
+    </div>
+    <div class="errbars reveal" id="err-bars"></div>
+    <p class="seed-caption reveal" id="err-note" style="margin-top:18px"></p>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section id="setup">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">The pipeline</div>
+      <h2>Setup at a glance</h2>
+    </div>
+    <div class="setupgrid reveal" id="setup-grid"></div>
+  </div>
+</section>
+
+<!-- LIMITATIONS -->
+<section id="limitations">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Scope of the claims</div>
+      <h2>Limitations</h2>
+    </div>
+    <ul class="ticklist reveal" id="limitations"></ul>
+  </div>
+</section>
+
+<!-- CODE CTA -->
+<section id="code">
+  <div class="wrap">
+    <div class="codecta reveal">
+      <div class="eyebrow" style="color:var(--gold)">Reproduce it</div>
+      <h2>Everything here is checkable from the code</h2>
+      <p>The repository ships per-seed numbers, significance tests, and the full training pipeline. Verify the headline statistics in seconds — no GPU, no data download required.</p>
+      <p style="margin-bottom:18px"><code>python scripts/reproduce_stats.py</code></p>
+      <a class="btn btn-primary" href="https://github.com/soodashima91/Garhwali-ASR" target="_blank" rel="noopener">Browse the code on GitHub →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="cite">
+  <div class="wrap">
+    <div class="reveal">
+      <h2>Cite this work</h2>
+      <div class="cite" id="cite-box">Batra, K. S., Singh, P., Sood, A., Singh, J., &amp; Sharma, S. (2026). Seeds Before Objectives: Rethinking Evaluation for Low-Resource Garhwali ASR. In Proceedings of the International Conference on Natural Language and Speech Processing (ICNLSP 2026).</div>
+      <div class="foot-links">
+        <a href="https://github.com/soodashima91/Garhwali-ASR" target="_blank" rel="noopener">💻 Code &amp; data instructions</a>
+        <a href="#" onclick="alert('Accepted at ICNLSP 2026. Proceedings link coming soon.'); return false;">📄 Paper (ICNLSP 2026)</a>
+        <a href="mailto:sood-a1@ulster.ac.uk">✉️ sood-a1@ulster.ac.uk</a>
+      </div>
+      <p style="margin-top:24px;font-size:.8rem;color:var(--ink-soft)">
+        Accepted at ICNLSP 2026. Interactive companion to the paper; all figures generated from the committed results in this repository.
+      </p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

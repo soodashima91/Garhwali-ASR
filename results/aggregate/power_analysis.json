@@ -1,0 +1,40 @@
+{
+  "exp": "objective",
+  "alpha": 0.05,
+  "target_power": 0.8,
+  "n_seeds": {
+    "standard": 5,
+    "focal": 5,
+    "matra": 5
+  },
+  "pairs": [
+    {
+      "pair": "standard_vs_focal",
+      "n_seeds": 5,
+      "mean_diff_wer": 0.8113050706566923,
+      "cohen_dz": 0.9839629625964577,
+      "paired_t_p": 0.09263118013141065,
+      "achieved_power": 0.39124989102263036,
+      "seeds_for_target_power": 11
+    },
+    {
+      "pair": "standard_vs_matra",
+      "n_seeds": 5,
+      "mean_diff_wer": 0.39567747298420813,
+      "cohen_dz": 0.6606779381101868,
+      "paired_t_p": 0.21365007028286526,
+      "achieved_power": 0.20846008074663444,
+      "seeds_for_target_power": 20
+    },
+    {
+      "pair": "focal_vs_matra",
+      "n_seeds": 5,
+      "mean_diff_wer": -0.41562759767248425,
+      "cohen_dz": -0.9071437642870719,
+      "paired_t_p": 0.11241273566258633,
+      "achieved_power": 0.34365575207051,
+      "seeds_for_target_power": 12
+    }
+  ],
+  "summary": "Largest objective gap (standard_vs_focal, +0.81 WER, dz=+0.98) has achieved power 0.39 at n=5 seeds; ~11 seeds would be needed for 80% power. Differences are therefore reported as not reliably established rather than absent."
+}
