@@ -7,6 +7,13 @@ The central claim is methodological: at low-resource-dialect corpus sizes,
 single-run comparisons are unreliable, so we evaluate every intervention over
 five seeds on the **official VAANI splits** with paired significance testing.
 
+## Interactive companion site
+
+An interactive summary of this paper's results — the per-seed scatter, model
+comparison, objective/power analysis, and layer-wise probing:
+
+**https://soodashima91.github.io/Garhwali-ASR/**
+
 ## TL;DR
 
 At the corpus sizes typical of low-resource dialects, single-run ASR comparisons
@@ -116,25 +123,5 @@ augmentation, ~2.9 h/run with 3x speed augmentation.
 
 ## Citation
 
-See the paper. Code, splits, and per-seed outputs are released to support
-reproducible, variance-aware evaluation for low-resource dialectal ASR.
-
-## Interactive companion site
-
-An interactive summary of this paper's results — the per-seed scatter, model
-comparison, objective/power analysis, and layer-wise probing — is published
-from the [`docs/`](docs/) folder via GitHub Pages:
-
-**https://soodashima91.github.io/Garhwali-ASR/**
-
-Every figure on the site is generated from the committed numbers in
-`results/aggregate/` and `results/probing/`.
-
-## Note on the HuBERT baseline
-
-`results/aggregate/master_results.csv` reports HuBERT Large at **62.14 WER**,
-the raw mean over all five seeds. Seed 777 failed to converge (validation WER
-0.73 vs. ~0.66 for the other seeds). The paper therefore excludes that seed and
-reports the four-good-seed mean of **60.90 ± 0.49** (see the Appendix table and
-footnote). Both numbers are correct for what they measure; the paper uses the
-outlier-excluded value.
+Accepted at ICNLSP 2026; proceedings details will be added when the paper is
+online.
