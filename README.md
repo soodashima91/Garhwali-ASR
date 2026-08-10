@@ -6,26 +6,18 @@ Rethinking Evaluation for Low-Resource Garhwali ASR"* (ICNLSP 2026).
 The central claim is methodological: at low-resource-dialect corpus sizes,
 single-run comparisons are unreliable, so we evaluate every intervention over
 five seeds on the **official VAANI splits** with paired significance testing.
-This repo lets you (a) **verify** the headline statistics from committed
-numbers with no GPU, and (b) **retrain** every system from scratch.
 
-## What is and isn't here
+## TL;DR
 
-This release contains **code and transcript-free numerical results only**.
-
-It does **not** contain, and you must obtain separately:
-
-- **Audio and transcripts** — the VAANI Garhwali subset is distributed by its
-  authors (ARTPARK-IISc) under its own terms. We redistribute no recordings
-  or reference text. The scripts stream it directly from the Hugging Face Hub
-  (`ARTPARK-IISc/Vaani-transcription-part`, config `Garhwali`).
-- **Trained model checkpoints** — not distributed (size, and to keep the
-  release code-only). Retrain with the scripts below.
-- **Per-utterance predictions with reference text** — deliberately withheld.
-  A reference/hypothesis pair reconstructs corpus content, so we ship only the
-  scored, aggregated numbers (per seed, per phonological class). The trainers
-  can regenerate `predictions.csv` locally via `--dump-predictions`, but those
-  files are for your own analysis and should not be redistributed.
+At the corpus sizes typical of low-resource dialects, single-run ASR comparisons
+can show "gains" that are really just seed noise. We build the first reproducible
+multi-seed benchmark for **Garhwali** on the official VAANI splits, evaluating
+every intervention over five seeds with significance testing. The result: neither
+Focal CTC nor a matra-weighted objective beats standard CTC, the matra objective
+fails to cut even its targeted errors, and Hindi→Garhwali transfer adds nothing
+over direct fine-tuning. What holds up is mundane — **w2v-BERT 2.0 with standard
+CTC reaches 47.0% WER over five seeds**, beating the larger MMS-1B, and speed
+augmentation gives a small, consistent gain.
 
 ## Layout
 
