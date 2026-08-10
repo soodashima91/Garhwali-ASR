@@ -81,7 +81,7 @@
   }
 
   function renderLimitations() {
-    const u = $("#limitations");
+    const u = document.querySelector("ul#limitations");
     DATA.limitations.forEach(x => u.appendChild(el("li", null, x)));
   }
 
