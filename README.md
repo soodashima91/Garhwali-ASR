@@ -1,4 +1,4 @@
-# Seeds Before Objectives: Multi-Seed Garhwali ASR
+# Seeds Before Objectives: Rethinking Evaluation for Low-Resource Garhwali ASR
 
 Code and per-seed numerical results for the paper *"Seeds Before Objectives:
 Rethinking Evaluation for Low-Resource Garhwali ASR"* (ICNLSP 2026).
